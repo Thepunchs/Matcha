@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Matcha</title>
+         <%- css.style %>
+    </head>
+ 
+    <body id="pageprofil">
+    <a href="/"><img src="../title.png" id=title></a><br/>
+    <div class="pad"><a href="/register"><div class="buttons"> Register </div></a></div>
+
+    <div class="log grey" style="height: 290px;">
+        <h2> Login </h2>
+        <form action="login" method="post">
+            <input type="text" class='user' placeholder="Login" name="login">
+            <input type="password" class='user' placeholder="Passwd" name="pass">
+            <input type="submit" class='user userinput' value="login">
+        </form>
+        <% if (typeof error !== 'undefined' && error && error !== 'none') { %> <div id=errorlog><strong>Error: <%- error %></strong></div> <% } %>
+        <% if (typeof success !== 'undefined' && success) { %> <div id=successlog><strong>Success: <%- success %></strong></div> <% } %>
+    </div>
+    <div id="forgot" class="grey"><h3>Forgot your password ?</h3>
+            <form action="forgot" method="post">
+                <input type="email" class='user' name="email" placeholder="Email"><br/>
+                <input type="submit" class='user userinput' name="submit" value="Reinitialiser" style="font-size : 20px; color:#4d4d4d;"></form>
+            <% if (typeof error2 !== 'undefined' && error2 && error2 !== 'none') { %> <div id=errorlog><strong>Error: <%- error2 %></strong></div> <% } %>
+            <% if (typeof success2 !== 'undefined' && success2) { %> <div id=successlog><strong>Success: <%- success2 %></strong></div> <% }%>
+    </div>
+    <% include footer.ejs %>
+    </body>
+    
+</html>

@@ -1,0 +1,58 @@
+ <div id="head">
+	<a href="/"><img src="../title.png" id=title></a><br/>
+		<div class="pad">
+			<a href="/logout"><div class="buttons"> Logout </div></a>
+			<a href="/profile"><div class="buttons">My account</div></a>
+			<a href="/public_profile"><div class="buttons">Public profile</div></a><br/>
+			<div class="buttons" onclick="shownotif()">
+			<div class=notifdot id=dot style='display:none;'></div>  Notifications </div>
+			<a href="/peers"><div class="buttons">Peers</div></a>
+			<a href="/matchs"><div class="buttons">Matchs</div></a>
+		</div>
+</div>
+
+<div id="notifbox" style='display:none;'> 
+	<% if (Array.isArray(notif) == false) { %>
+		<p id=nonotifs> Sorry, No Notifications Yet </p>
+	<% } else { var i = 0;
+		while (notif[i]) { %>
+		<a href=<%-'/user_profile/' + notif[i].his_id %> style='text-decoration: none;'>
+			<% if (notif[i].seen == 1) { %><div class=notif> <% } else { %><div class=notifunseen><% } %>
+				<p> <%- notif[i].notif %> </p>
+				<p> <%- notif[i].date %> </p>
+			</div>
+		</a><% if (notif[i + 1]) { %><hr style="margin:0px;"/><% } %>
+	<% i++; } } %>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+   var socket = io('http://localhost:8080');
+   <% if (Array.isArray(notif) == false) { %>
+    	var id = <%- notif %> ;
+	<% } else { %>
+		var id = <%- notif[0].user_id %> ;
+	<% }  %>
+   	socket.on('connect', function (data) {
+    	socket.emit('setUserId', id);
+	});
+	socket.on('notification', function (data) {
+		$('#notifbox').prepend('<a href="/user_profile/' + data.his_id +'" style="text-decoration: none;"><div class=notifunseen><p>' + data.not + '</p><p> ' + data.date + '</p></div></a><hr style="margin:0px;"/>');
+		document.getElementById('dot').style.display = "inherit";
+	});
+	<% if (Array.isArray(notif) == false || notif[0].seen == 1) {%>
+		   	document.getElementById('dot').style.display = "none";
+	 <% } else { %> 
+	 		document.getElementById('dot').style.display = "inherit";
+		<% } %>
+	function shownotif() {
+		if (document.getElementById('notifbox').style.display == 'none')
+		{
+   			document.getElementById('notifbox').style.display = "block";
+   			document.getElementById('dot').style.display = "none";
+   			socket.emit('seen', id)
+		}
+		else
+			document.getElementById('notifbox').style.display = "none";
+	}
+</script>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8" />
+    <title>Your matchs</title>
+     <%- css.style %>
+</head> 
+<body id="pageprofil">
+<% include header.ejs %>
+
+	<% i = 0;
+	if (match != 'none') {
+	while (match[i]) { %>
+		<div class="peermatch white2" style="text-decoration:none">
+			<div style="width: 200px;">
+		<p class="marg_right"><b id="logpeer"><%-match[i].login%></b><br/>
+		<%- match[i].firstname %><br/><%- match[i].lastname%> </p></div>
+		<img src='<%- match[i].img1 %>' class="peerimg marg_right">
+		<div style="width: 200px;">
+		<p> <%- match[i].gender  + ' | ' + match[i].orientation %><br/>
+		<%- 'Score : ' + match[i].score %> <br/>
+		<i><%- '  Age: ' %><b><%- match[i].age%></b></i></p></div>
+		<a href='<%-'/user_chat/' + match[i].id %>'><img src='../chat.png' class="chatprofileimg marg_right"></a>
+		<a href='<%-'/user_profile/' + match[i].id %>'><img src='../profile.png' class="chatprofileimg"></a>
+		</div>
+		<%  i++ } } else { %>
+		<div class="white size"><h2 id="nomatch"> No match yet ! <a href="/peers" style="color:black;">Find your peer NOW !</a></h2></div>
+		<% } %>
+
+</body>

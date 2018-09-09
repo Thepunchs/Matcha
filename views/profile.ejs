@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Your Profile</title>
+     <%- css.style %>
+</head>     
+<body id="pageprofil">
+<% include header.ejs %>
+<div id="truc"><% if (typeof error !== 'undefined' && error && error !== 'none') { 
+    %> <div id=error><strong>Error: <%- error %></strong></div> <% } %>
+    <% if (typeof success !== 'undefined' && success) { 
+    %> <div id=success><strong>Success: <%- success %></strong></div> <% } %>
+</div>
+    <h1 id="ypro"><%- profile.login %> : Your profile </h1>
+    <div class="profile">
+        <h2>Score</h3>
+    <div class="score">
+        <i>Your actual score on Find Your Peer :</i> <div id="sc"><strong><%- profile.score %></strong></div>
+    </div>
+       <h2>Location</h2>
+    <div class="location">
+        <i>Your actual location :</i> <strong><%- profile.location %></strong><br/><hr/>
+        <form action="profile" method="post"><i>Your fake location :</i> 
+            <input class="profilebox" type="text" name="modifloc" id="modifloc" placeholder="<%- profile.fakelocation %>" maxlenght="100" required>
+            <input class="profilebutton" type="submit" name="fakeloc" value="Modify" id="changefakeloc" disabled="disabled">
+        </form><hr/>
+        <label><span style="margin-right: 10px;"> Show your real location ? </span>
+            <input type="checkbox" name="checkboxName" class="checklocation"/>
+            <div id="switch" class="switch <% if (profile.showlocation === 1) { %> switchOn <% } %>"></div>
+        </label>
+    </div>
+        <h2>Pictures</h2>
+    <div class="pictures">
+       <form action="/new_img" method="post" enctype="multipart/form-data">
+            <img src="<%- profile.img1 %>" width="300" height="200"><BR \>
+            <input type=file name=file accept=".jpg, .jpeg, .png" required>
+            <input type=submit name=img1 value="Upload Image">
+       </form>
+       <form action="/new_img" method="post" enctype="multipart/form-data">
+            <img src="<%- profile.img2 %>" width="300" height="200"><BR \>
+            <input type=file name=file accept=".jpg, .jpeg, .png" required>
+            <input type=submit name=img2 value="Upload Image">
+       </form>
+       <form action="/new_img" method="post" enctype="multipart/form-data">
+            <img src="<%- profile.img3 %>" width="300" height="200"><BR \>
+            <input type=file name=file accept=".jpg, .jpeg, .png" required>
+            <input type=submit name=img3 value="Upload Image">
+       </form>
+       <form action="/new_img" method="post" enctype="multipart/form-data">
+            <img src="<%- profile.img4 %>" width="300" height="200"><BR \>
+            <input type=file name=file accept=".jpg, .jpeg, .png" required>
+            <input type=submit name=img4 value="Upload Image">
+       </form>
+       <form action="/new_img" method="post" enctype="multipart/form-data">
+            <img src="<%- profile.img5 %>" width="300" height="200"><BR \>
+            <input type=file name=file accept=".jpg, .jpeg, .png" required>
+            <input type=submit name=img5 value="Upload Image">
+       </form>
+   </div>
+
+   <h2>Account</h2>
+   <div class="account">
+       <form action="/profile" method="post">
+            <select class="profilebox" name="edit" id='modifyuserlist' onchange="placeholder()">
+                <option value='1'> Login </option>
+                <option value='2'> Firstname </option>
+                <option value='3'> Lastname </option>
+                <option value='4'> Password </option>
+                <option value='5'> Email </option>
+            </select>
+            <input class="profilebox" type="text" name="changement" id='modifyuser' required>
+            <input class="profilebox" type="text" name="confirm" placeholder=Confirm id='confirm' required>
+            <input class="profilebutton" type="submit" name="general" value="Modify" id="change" disabled="disabled">
+        </form>
+
+    </div>
+    <h2>Characteristics</h2>
+    <div class="caracs">
+        <form action="/profile" method="post">
+            Sexual Orientation :
+             <select class="profilebox" name="orientation">
+                <% if (!profile.orientation) { %>
+                <option> Select Sexual Orientation </option>
+                <% } else { %>
+                <option><%- profile.orientation %> </option><% } %>
+                <option> Heterosexual </option>
+                <option> Bisexual </option>
+                <option> Homosexual </option>
+            </select>
+            <input class="profilebutton"  type="submit" name="sub_orientation" value="Modify">
+        </form>
+        <form action="/profile" method="post">
+        Your Gender :
+        <select class="profilebox" name="gender">
+            <% if (!profile.gender) { %>
+            <option> Select Gender </option>
+            <% } else { %>
+            <option><%- profile.gender %> </option><% } %>
+            <option> Male </option>
+            <option> Female </option>
+        </select>
+        <input class="profilebutton" type="submit" name="sub_gender" value="Modify">
+        </form>
+         <form action="/profile" method="post">
+            Your Age :
+        <input class="profilebox" style="width: 50px;" type="number" name="age" value="<%- profile.age %>">
+        <input class="profilebutton" type="submit" name="sub_age" value="Modify">
+        </form>
+        <div class="bio">
+        Your Biography:
+        <form action="/profile" method="post">
+            <textarea class="profilebigbox" type=text name=bio placeholder='Your biography' maxlength=60000 required><%- profile.bio %></textarea><br/>
+            <input class="profilebutton" type=submit name=sub_bio value="Update Biography">
+        </form></div>
+    
+</div>
+<h2>Tags</h2>
+    <div class="tags">
+        <div class="addtag">
+    <form action="/profile" method="post">
+            <input class="profilebox" type="text" name="newtag" id='newtag' maxlength="40">
+            <input class="profilebutton" type="submit" name="general" value="Ajouter" id="tagbutton" disabled="disabled">
+    </form></div>
+<div class="actualtags">
+       <% 
+       if (typeof profile && profile.tag) { i = 0
+       while (profile.tag[i])
+         {
+            %>
+            <div class="tag"><form action="/profile" method="post"><strong>#<%= profile.tag[i].tag %></strong><input type="image" src="croix.svg" id="buttondeletetag" name="deltag" value="<%= profile.tag[i++].id %>"></form></div><%
+         }}
+         %>
+     </div>
+    </div>
+<h2>History</h2>
+<div class="history">
+        <div class="hist">
+            <p class="titlehist"><i> Peers who have liked you : </i></p>
+            <div class="white">
+            <% if (like != 'none') {
+            i = 0; while (like[i]) { %>
+            <a href="<%-'/user_profile/' + like[i].id %>" class="peerhist">
+                <li><b><i><%- like[i].login %></b></i> <%- ' : ' + like[i].firstname + ' ' + like[i].lastname + ' | Age : ' + like[i].age + ' | Score : ' + like[i].score %></li>
+            </a><hr/>
+            <% i++ } } %></div>
+        </div>
+    <div class="hist">
+       <p class="titlehist"><i> Peers who have visited your profile : </i></p>
+        <div class="white">
+            <% if (visit != 'none') {
+            i = 0; while (visit[i]) { %>
+            <a href="<%-'/user_profile/' + visit[i].id %>" class="peerhist">
+                <li><b><i><%- visit[i].login %></b></i><%- ' : ' + visit[i].date %></li>
+            </a><hr/>
+            <% i++ } } %> </div>
+     </div>
+    </div>
+
+</div>
+</body>
+ </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$.ajax({
+    url: 'http://api.ipstack.com/check?access_key=97307c73fbc24738033ecab287ad0a82',   
+    dataType: 'jsonp',
+    success: function(json) {
+        var httpPost = new XMLHttpRequest();
+        httpPost.open("POST", "/profile");
+        httpPost.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        httpPost.send('table=' +  encodeURIComponent(JSON.stringify(json)));
+    } 
+}); 
+socket.on('locationset', function (data) {
+<% if(!profile.location) { %>
+    location.reload();
+    //window.location.href ='/profile';
+<% } %>
+    });
+
+$(document).ready(function()
+{
+$('.switch').click(function()
+{
+    $(this).toggleClass("switchOn");
+    $.ajax({
+        type: "POST",
+        url: "profile",
+        data: {
+            switch: $(this).hasClass("switchOn")
+        },
+        success: function() {
+                $("#truc").html("<div id='success'><strong>Success: Location preference updated</strong></div>");
+
+        }
+    });
+});
+ 
+});
+
+    modifloc = document.getElementById('modifloc');
+    fakeloc = document.getElementById('changefakeloc');
+    change = document.getElementById('change');
+    modif = document.getElementById('modifyuser');
+    confirm = document.getElementById('confirm');
+    tagbutton = document.getElementById('tagbutton');
+    newtag = document.getElementById('newtag');
+    verif();
+    function verif() {
+    setTimeout(verif,500);
+    if (modif.value != "" && confirm.value != "")
+        change.disabled = false;
+    else
+        change.disabled = true;
+    if (newtag.value != "")
+        tagbutton.disabled = false;
+    else
+        tagbutton.disabled = true;
+    if (modifloc.value != "")
+        fakeloc.disabled = false;
+    else
+        fakeloc.disabled = true;
+}
+    window.onload = placeholder();
+    function placeholder() {
+        var s = document.getElementById("modifyuserlist").value;
+        if (s == '1')
+            var i = '<%- profile.login %>'
+        else if (s == '2')
+            var i = '<%- profile.firstname %>'
+        else if (s == '3')
+            var i = '<%- profile.lastname %>'
+        else if (s == '4')
+        {
+            var i = 'New Password'
+            modif.type = "Password";
+            confirm.type = "Password";
+        }
+        else if (s == '5')
+            var i = '<%- profile.email %>'
+        if (s != '4')
+        {
+            modif.type = "text";
+            confirm.type = "text";
+        }
+        document.getElementById("modifyuser").placeholder = i; }  
+</script>

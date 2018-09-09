@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8" />
+    <title>Your Profile</title>
+     <%- css.style %>
+</head> 
+<body id="pageprofil">
+<% include header.ejs %>
+<div class='left grey'> 
+	<% if (profile.active == null) { profile.active = 'Never' }
+	 if (online == 1) { %><p class="on">• Online</p><% } else { %>
+	<p class="off1">• Offline</p> <p class="off2">Since : <%- profile.active %></p><% } %>
+	<img class=img src="../<%- profile.img2 %>"><BR \>
+	<img class=img src="../<%- profile.img3 %>"><BR \>
+	<img class=img src="../<%- profile.img4 %>"><BR \>
+	<img class=img src="../<%- profile.img5 %>"><BR \> <!-- 0 = personne | 1 = moi like | 2 = lui like | 3 = match -->
+</div>
+<div class='grey public'>
+	<% if (like != -1) { %>
+	<div class="buttonsblock">
+	<form action="/public_profile/<%- profile.id %>" method="post">
+		<input type="submit" name="block" value="Block" class="buttonblock 
+		<% if (block == 1) { %> redbutton <% } %>">
+	</form>
+	<form action="/public_profile/<%- profile.id %>" method="post">
+		<input type="submit" name="report" value="Report as fake" class="buttonblock <% if (report == 1) { %> redbutton <% } %>">
+	</form>
+	</div><% } %>
+	<h1 style="text-align: center;"><%- profile.firstname %>  <%- profile.lastname %>'s Profile</h1>
+
+	<HR /><br/>
+<div class="photoprincipale">
+	<img class="img img1" src="<%- profile.img1 %>"><BR \>
+	<% if (like == 2) { %>
+		<p class="msgpeer"><i><b> This peer likes you ! </b></i></p>
+	<% } %>
+	<% if (like == 3) { %>
+        <p class="msgpeer"><i><b> It's a match ! </b>
+        <a href="<%- '/user_chat/' + profile.id %>" class="nolink">Chat with <%- profile.firstname %></a></i></p>
+    <% } %>
+	<form action="/public_profile/<%- profile.id %>" method="post">
+		<input type="submit" class="imglike <% if (like == -1 || like == 1 || like == 3) { %> grayscale <% } %>"  name="like" value="" id="like">
+		<input type="submit" class="imgdislike <% if (like == -1 || like == 0 || like == 2) { %> grayscale <% } %>"  name="dislike" value="" id="dislike">
+	</form>
+</div>
+
+	<br/>
+	<HR /><br/>
+	<div class="glob">
+	<h3> Username: <i id="white"><%- profile.login %></i> </h3>
+	<h3> Gender: <i id="white"><%- profile.gender %></i> </h3>
+	<h3> Age: <i id="white"><%- profile.age %></i></h3>
+	<h3> Sexual Orientation: <i id="white"><%- profile.orientation %></i> </h3>
+	<h3> Score of Popularity: <i id="white"><%- profile.score %></i> </h3>
+</div>
+<div class="glob_bio">
+	<h3> Biography: </h3>
+	<p class=white><%- profile.bio %> </p>
+</div>
+<div class="glob_tag">
+	<h3> Tags: </h3>
+	
+	
+	<%
+       if (typeof tag && tag) { i = 0
+       	 while (tag[i]) { %>
+            <div class="tag"><strong>#<%- tag[i].tag %> </strong></div>
+        <% i++ }} %> </div><br/>
+        <HR \>
+        <% if (typeof profile && profile.showlocation === 1) {  %>
+<p style="text-align: center;"><strong>Location:</strong><br/><br/><i> <%- profile.location %><br/></i>
+	<% } else if(typeof profile && profile.showlocation === 0 && profile.fakelocation != '' && profile.fakelocation != ' ') { %> 
+	<p style="text-align: center;"><strong>Location:</strong><br/><br/><i> <%- profile.fakelocation %><br/></i>
+	<% } %>
+	<br/>
+	<%
+	var point1 = new geopoint(req.session.profile.latitude, req.session.profile.longitude) 
+		point2 =  new geopoint(profile.latitude, profile.longitude)
+		distance = point1.distanceTo(point2, true)
+		if (!distance)
+			distance = '0';
+	%>
+	Distance : <%- parseInt(distance, 10)%> km
+	</i></p>
+</div>
+<script>
+	<% if (like == 1 || like == 3) { %>
+		document.getElementById("like").disabled = "disabled";
+	<% } else if (like == -1) { %>
+		document.getElementById("like").disabled = "disabled";
+		document.getElementById("dislike").disabled = "disabled";
+	<% } else { %>
+		document.getElementById("dislike").disabled = "disabled";
+	<% } %>
+</script>
+</body></html>

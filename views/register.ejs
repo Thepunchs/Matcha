@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Matcha</title>
+        <%- css.style %>
+    </head>
+    <body id="pageprofil">
+        <a href="/"><img src="../title.png" id=title></a><br/>
+        <div class="pad"><a href="/login"><div class="buttons"> Login </div></a></div>
+        <div class="log grey">
+            <h2> Inscription </h2>
+            <form action="register" method="post">
+                <input type="text" class='user' name=login placeholder="Username">
+                <input type="text" class='user' name=firstname placeholder="First Name">
+                <input type="text" class='user' name=lastname placeholder="Last Name">
+                <input type="password" class='user' name=pass placeholder="Password">
+                <input type="password" class='user' name=confirmpass placeholder="Password Confirm">
+                <input type="mail" class='user' name=mail placeholder="Email">
+                <input type="submit" class='user userinput' name=submit Value="register">
+            </form>
+        </div>
+        <% if (typeof error !== 'undefined' && error && error !== 'none') { %> <div id=error><strong>Error: <%- error %></strong></div> <% } %>
+        <% if (typeof success !== 'undefined' && success) { %> <div id=success><strong>Success: <%- success %></strong></div> <% } %>
+        <% include footer.ejs %>
+    </body>
+</html>

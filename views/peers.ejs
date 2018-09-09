@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Your Profile</title>
+     <%- css.style %>
+</head>     
+<body id="pageprofil">
+<% include header.ejs %>
+<input type="button" value="Show Filters" onclick="showFiltres()" class="buttonfiltres"/>
+<div class="filtres" id="filtres" style="display:none;">
+	<form action="/peers" method="post">
+		 <div class="filtre_option">
+		 	<label class="minititle"> Age : </label><label class="labeltri">Between <input class="tribox" type="number" name="agemin"> and <input type="number" class="tribox" name="agemax"> Yo</label>
+		 </div>
+		 <div class="filtre_option">
+		 	<label class="minititle"> Score : </label><label class="labeltri">Between <input class="tribox" type="number" name="scoremin"> and <input type="number" class="tribox" name="scoremax"></label>
+		 </div>
+		 <div class="filtre_option">
+		 	<label class="minititle"> Localisation : </label><label class="labeltri">Maximum <input class="tribox" type="number" name="distance"> km</label>
+		 </div>
+		 <div class="filtre_option">
+		 	<label class="minititle"> Tags : </label>
+		 	<textarea style="width: 15vw;" class="tribox" type="text" placeholder="(separate by ';')" name="tags"></textarea>
+		 </div>
+		<div class="filtre_option" style="">
+			<label class="minititle">Sort by :</label>
+			<select class="tribox" name="tri" style="width: 7vw;height: 1.8vw;">
+					<option>None</option>
+			        <option>Age</option>
+			        <option>Score</option>
+			        <option>Location</option>
+			        <option>Tags</option>
+			</select>
+		</div><br/>
+		 <input type="submit" value="Set Filters" class="buttonfiltres"/>
+	</form>
+</div>
+<div class='peerbox'>
+	<% var i = 0; while (peer[i]) { %>
+	<a class="peer white2" href='<%-'/user_profile/' + peer[i].id %>' style="text-decoration:none">
+		<p><b><%-peer[i].login%></b> </p>
+		<img src='<%- peer[i].img1 %>' class=peerimg>
+		<p><%- peer[i].firstname + ' ' + peer[i].lastname%> </p>
+		<p> <%- peer[i].gender  + ' | ' + peer[i].orientation %><br/><i><%- '  Age: ' + peer[i].age%></i><br/>
+		<%- 'Commun Tags : ' + peer[i].scoretag %><br/>
+		<% if (!peer[i].distance)
+			peer[i].distance = '0'; %>
+		<%- 'Score : ' + peer[i].score + ' | ' + parseInt(peer[i].distance, 10) + ' km' %> </p>
+	</a>
+	<% i++; } %>
+</div>
+<script>
+	function showFiltres() {
+		if (document.getElementById('filtres').style.display == 'none')
+   			document.getElementById('filtres').style.display = "block";
+		else
+			document.getElementById('filtres').style.display = "none";
+}
+</script>
+</body></html>
